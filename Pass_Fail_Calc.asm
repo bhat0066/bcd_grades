@@ -15,11 +15,12 @@
 ;
 ;
 ; Program Constants
-DELAY_VALUE     equ     250
+DELAY_VALUE	equ     250
 Len_Array       equ     End_Course_Data-Start_Course_Data
 
 ; data section
                 org     $1000
+
 ; Read in Data File
 Start_Course_Data
 ; remove the comment symbol (;) to unmask your lab section's include statement
@@ -32,31 +33,30 @@ Start_Course_Data
 End_Course_Data
 
 ; code section
-        	org     $2000           ; RAM address for Code
-       		lds     #$2000          ; Stack
+                org     $2000           ; RAM address for Code
+                lds     #$2000          ; Stack
                 ldy     #Start_Course_Data
-                
-Loop            cmpa     #End_Course_Data
+
+Loop            cpy     #End_Course_Data
                 beq     EndLoop
-		ldaa    5,y+
+                ldaa    5,y+
                 ldab    #$05
-		jsr     Calculate_Average
-        	jsr     Pass_Fail
-		ldaa    3,y+
+                jsr     Calculate_Average
+                jsr     Pass_Fail
+                ldaa    3,y+
                 ldab    #$03
-        	jsr     Calculate_Average
-        	jsr     Pass_Fail
-        	bra     Loop
+                jsr     Calculate_Average
+                jsr     Pass_Fail
+                bra     Loop
 EndLoop
-		jsr     Config_Hex_Displays
-        
-; start loop
-        	jsr    PF_HEX_Display
-; check for end cond
+                jsr     Config_Hex_Displays
+                
+; start loop2
+                jsr     PF_HEX_Display
+                ;check for remaining students
+                ;loop ends
 
-
-
-Done    	bra     Done                ; infinite loop keeps last value on 7-seg display
+Done		bra     Done                ; infinite loop keeps last value on 7-seg display
 
 ; ***** DO NOT CHANGE ANY CODE BELOW HERE *****;
 #include Calculate_Average.asm
@@ -64,4 +64,4 @@ Done    	bra     Done                ; infinite loop keeps last value on 7-seg d
 #include C:\68HCS12\Lib\Config_Hex_Displays.asm
 #include C:\68HCS12\Lib\PF_HEX_Display.asm
 #include C:\68HCS12\Lib\Delay_ms.asm
-        	end
+                end
