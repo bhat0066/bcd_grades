@@ -1,8 +1,4 @@
 ; HEX_Display.asm
-
-; Author:               D. Haley
-; Student Number:       Faculty
-; Date:                 12 Nov 2016
 ;
 ; Purpose:              A Subroutine to display a value on a Hex Display
 ;
