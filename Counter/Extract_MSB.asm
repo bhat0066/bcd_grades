@@ -1,23 +1,20 @@
 ; Extract_MSB.asm
-
-; Author:
-; Student Number:
-; Date:
 ;
-; Purpose:
+; Purpose:              This program extracts the upper nibble of accumulator
+;                       from 8 bit accumulator
 ;
-; Preconditions:
+; Preconditions:        Value to be converted is in Accumulator A
 ;
 ;
-; Postcondition:
+; Postcondition:        A is destroyed
 ;
 ;
 ;
 Extract_MSB
-        lsra
-        lsra
-        lsra
-        lsra
+        lsra           ; pushes zero in from left
+        lsra           ; pushes zero in from left
+        lsra           ; pushes zero in from left
+        lsra           ; pushes zero in from left
         rts
 ;- ------------------------------------
 ;     End Extract_MSB.asm             -
