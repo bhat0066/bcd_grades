@@ -15,8 +15,13 @@
 ;
 ;
 ; Program Constants
+<<<<<<< HEAD
 DELAY_VALUE     equ     255
 DIGIT3_PP0      equ     %00000111        ; MSB of the displayed BCD digits (left-most dislay)
+=======
+DELAY_VALUE	equ     250
+Len_Array       equ     End_Course_Data-Start_Course_Data
+>>>>>>> origin/master
 
 ; data section
                 org     $1000
@@ -38,6 +43,7 @@ Result                db        $00
 
 ; code section
                 org     $2000           ; RAM address for Code
+<<<<<<< HEAD
 
                 lds     #$2000          ; Stack
                 ldx     #Student_Array
@@ -130,6 +136,31 @@ Display         ldab    #DIGIT3_PP0
                 bra     Blank
                 
 Done            bra     Done                ; infinite loop keeps last value on 7-seg display
+=======
+                lds     #$2000          ; Stack
+                ldy     #Start_Course_Data
+
+Loop            cpy     #End_Course_Data
+                beq     EndLoop
+                ldaa    5,y+
+                ldab    #$05
+                jsr     Calculate_Average
+                jsr     Pass_Fail
+                ldaa    3,y+
+                ldab    #$03
+                jsr     Calculate_Average
+                jsr     Pass_Fail
+                bra     Loop
+EndLoop
+                jsr     Config_Hex_Displays
+                
+; start loop2
+                jsr     PF_HEX_Display
+                ;check for remaining students
+                ;loop ends
+
+Done		bra     Done                ; infinite loop keeps last value on 7-seg display
+>>>>>>> origin/master
 
 ; ***** DO NOT CHANGE ANY CODE BELOW HERE *****;
 #include Calculate_Average.asm
@@ -137,4 +168,8 @@ Done            bra     Done                ; infinite loop keeps last value on 
 #include C:\68HCS12\Lib\Config_Hex_Displays.asm
 #include C:\68HCS12\Lib\PF_HEX_Display.asm
 #include C:\68HCS12\Lib\Delay_ms.asm
+<<<<<<< HEAD
                 end
+=======
+                end
+>>>>>>> origin/master
