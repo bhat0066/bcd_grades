@@ -19,8 +19,9 @@
 ;
 ; Postcondition:
 
-Pass_Fail
-
-
-
-        rts
+Pass_Fail       cmpa    #$05
+                blo     Fail
+                ldaa    #$01
+                bra     EndIf
+Fail            ldaa    #$00
+EndIf           rts

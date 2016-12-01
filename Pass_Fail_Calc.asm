@@ -15,11 +15,12 @@
 ;
 ;
 ; Program Constants
-DELAY_VALUE     equ     250
-Len_Array       equ     End_Course_Data-Start_Course_Data
+DELAY_VALUE     equ     255
+DIGIT3_PP0      equ     %00000111        ; MSB of the displayed BCD digits (left-most dislay)
 
 ; data section
                 org     $1000
+
 ; Read in Data File
 Start_Course_Data
 ; remove the comment symbol (;) to unmask your lab section's include statement
@@ -31,32 +32,104 @@ Start_Course_Data
 ; #include "Fri_1-3_Marks.txt"
 End_Course_Data
 
+Student_Array        ds        12
+End_Student_Array
+Result                db        $00
+
 ; code section
-        	org     $2000           ; RAM address for Code
-       		lds     #$2000          ; Stack
+                org     $2000           ; RAM address for Code
+
+                lds     #$2000          ; Stack
+                ldx     #Student_Array
                 ldy     #Start_Course_Data
                 
-Loop            cmpa     #End_Course_Data
+Loop            cpy    #End_Course_Data
                 beq     EndLoop
-		ldaa    5,y+
+
+                ldaa    0,y
                 ldab    #$05
-		jsr     Calculate_Average
-        	jsr     Pass_Fail
-		ldaa    3,y+
+                pshx
+                ldaa    #$00
+                staa    Result
+                jsr     Calculate_Average
+                jsr     Pass_Fail
+                pulx
+                staa    1,x+
+
                 ldab    #$03
-        	jsr     Calculate_Average
-        	jsr     Pass_Fail
-        	bra     Loop
+                pshx
+                ldaa    #$00
+                staa    Result
+                jsr     Calculate_Average
+                jsr     Pass_Fail
+                pulx
+                staa    1,x+
+
+                bra     Loop
 EndLoop
-		jsr     Config_Hex_Displays
-        
-; start loop
-        	jsr    PF_HEX_Display
-; check for end cond
+                jsr     Config_Hex_Displays
 
+                ldx     #Student_Array
+                ldaa    #00
+Loops           cmpa    #06
+                beq     Done
+                psha
+                ldaa    0,x
+                ldab    1,x
+                ;ldaa    1,x+
+                ;ldab    1,x+
+                cmpa    #$01
+                bne     F
+                cba
+                bne     F
+                bra     P
+                ;cba
+                ;beq     P
+                ;bne     F
+                ;bra     Loops
+                
+P               pshx
+                ldaa    #$01
+                bra     Display
 
+F               pshx
+                ldaa    #$00
+                bra     Display
 
-Done    	bra     Done                ; infinite loop keeps last value on 7-seg display
+Cont            pulx
+                pula
+                inx
+                inx
+                inca
+                bra      Loops
+
+Blank           ldaa    #$02
+                ldab    #DIGIT3_PP0
+                jsr     PF_HEX_Display
+                ldaa    #DELAY_VALUE
+                jsr     Delay_ms
+                ldaa    #DELAY_VALUE
+                jsr     Delay_ms
+                ldaa    #DELAY_VALUE
+                jsr     Delay_ms
+                ldaa    #DELAY_VALUE
+                jsr     Delay_ms
+                bra     Cont
+
+                
+Display         ldab    #DIGIT3_PP0
+                jsr     PF_HEX_Display
+                ldaa    #DELAY_VALUE
+                jsr     Delay_ms
+                ldaa    #DELAY_VALUE
+                jsr     Delay_ms
+                ldaa    #DELAY_VALUE
+                jsr     Delay_ms
+                ldaa    #DELAY_VALUE
+                jsr     Delay_ms
+                bra     Blank
+                
+Done            bra     Done                ; infinite loop keeps last value on 7-seg display
 
 ; ***** DO NOT CHANGE ANY CODE BELOW HERE *****;
 #include Calculate_Average.asm
@@ -64,4 +137,4 @@ Done    	bra     Done                ; infinite loop keeps last value on 7-seg d
 #include C:\68HCS12\Lib\Config_Hex_Displays.asm
 #include C:\68HCS12\Lib\PF_HEX_Display.asm
 #include C:\68HCS12\Lib\Delay_ms.asm
-        	end
+                end

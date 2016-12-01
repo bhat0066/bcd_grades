@@ -15,8 +15,17 @@
 ;
 ; Postcondition:
 
-DIVISOR equ     $05
+DIVISOR                 equ     $05
 
-Calculate_Average
-
-        rts
+Calculate_Average       cmpb    #$00
+                        beq     End_Calculate_Average
+                        ldaa    1,y+
+                        adda    Result
+                        staa    Result
+                        decb
+                        bra     Calculate_Average
+End_Calculate_Average
+                        ldx     #DIVISOR
+                        idiv
+                        exg     d,x
+                        rts
