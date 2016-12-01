@@ -6,17 +6,17 @@
 
 ; Program Constants
 STACK           equ     $2000
-MAX_VALUE       equ     $99		          ; maximum value for the counter
+MAX_VALUE       equ     $99		; maximum value for the counter
 ADD_ONE         equ     $01             ; increment count by 1
 
 ; Port P (PPT) Display Selection Values
-DIGIT3_PP0      equ	    %00001110	      ; MSB of the displayed BCD digits
-					                              ; (left-most dislay)
-DIGIT2_PP1      equ	    %00001101	      ; LSB of the displayed BCD digits
-					                              ; (2nd display from left)
+DIGIT3_PP0      equ	%00001110	; MSB of the displayed BCD digits
+					; (left-most dislay)
+DIGIT2_PP1      equ	%00001101	; LSB of the displayed BCD digits
+					; (2nd display from left)
 
 ; Delay Subroutine Values
-DELAY_VALUE     equ     250		          ; Delay value (base 10) 0 - 255 ms
+DELAY_VALUE     equ     250		; Delay value (base 10) 0 - 255 ms
                                         ; 125 = 1/8 second, 250 = 1/4 second
                 org     $2000           ; program code
 Start           lds     #STACK          ; STACK location
@@ -55,3 +55,4 @@ Loop            psha                    ; push value in acc. A to stack
 #include Hex_Display.asm
 
                 end
+
